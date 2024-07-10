@@ -1,0 +1,12 @@
+annotated-types==0.7.0
+charset-normalizer==3.3.2
+elastic-transport==8.13.1
+elasticsearch==8.14.0
+psycopg2-binary==2.9.9
+pydantic==2.7.3
+pydantic-settings==2.3.1
+pydantic_core==2.18.4
+python-dotenv==1.0.1
+requests==2.32.3
+typing_extensions==4.12.2
+urllib3==2.2.2
