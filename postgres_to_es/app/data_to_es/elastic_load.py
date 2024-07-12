@@ -10,7 +10,7 @@ class ElasticLoader:
         self.index_name = index
         
     @backoff()
-    def upload(self, movies):
+    def upload(self, movies: list):
         if not self.client.indices.exists(index=self.index_name):
             self.client.indices.create(index=self.index_name, body=movie_index_conf)
         content = []

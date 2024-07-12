@@ -49,9 +49,9 @@ class ETL_Worker:
                     transformed_data = Transformer().transform(merged_data)
                     self.loader.upload(transformed_data)
                     self.state.set_state(key='modified', value=modified.strftime('%Y-%m-%d %H:%M:%S.%f %z'))
-                    logger.info(f"updated {len(transformed_data)},sleep for {self.sleeping_time} s")
+                    logger.info("updated %s, sleep for %s sec", len(transformed_data), self.sleeping_time)
                     time.sleep(self.sleeping_time)
-                logger.info(f"no updates found, sleep for {self.nap_time} seconds")
+                logger.info("no updates found, sleep for %s seconds", self.nap_time)
                 time.sleep(self.nap_time)
 
 

@@ -4,3 +4,4 @@ venv
 *venv*
 *__pycache__*
 *.vscode*
+app/data_to_es/storage.json

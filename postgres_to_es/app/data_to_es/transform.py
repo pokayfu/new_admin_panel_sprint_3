@@ -5,7 +5,7 @@ class Transformer:
     def __init__(self) -> None:
         self.model = Movie
 
-    def transform(self, data):
+    def transform(self, data: list[dict]):
         result = []
         for part in data:
             trans_data = self.transorm_persons(part['persons'])

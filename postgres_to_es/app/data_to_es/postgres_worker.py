@@ -3,7 +3,7 @@ import psycopg2
 
 
 class PostgresProducer:
-    def __init__(self, conn: psycopg2.extensions.connection, extract_size) -> None:
+    def __init__(self, conn: psycopg2.extensions.connection, extract_size: int) -> None:
         self.conn = conn
         self.extract_size = extract_size
         self.tables = ['film_work', 'person', 'genre']
@@ -25,11 +25,8 @@ class PostgresProducer:
     def iter_table(self, query: str):
         cursor = self.conn.cursor()
         cursor.execute(query)
-        while True:
-            lines = cursor.fetchmany(size=self.extract_size)
-            if not lines:
-                break
-            yield [dict(line) for line in lines]
+        while lines := cursor.fetchmany(size=self.extract_size):
+            yield [dict(line) for line in lines]  
 
 
 class PostgresEnricher:
@@ -41,7 +38,7 @@ class PostgresEnricher:
         'film_work': None
     }
     
-    def enrich(self, table: str, entity_ids):
+    def enrich(self, table: str, entity_ids: list[str]):
         tables = ['person', 'genre']
         if table == 'film_work':
             return entity_ids
@@ -54,14 +51,14 @@ class PostgresEnricher:
             return encriched_data
     
     @backoff()
-    def pg_query_exec(self, conn: psycopg2.extensions.connection, query) -> list[dict]:
+    def pg_query_exec(self, conn: psycopg2.extensions.connection, query: str) -> list[dict]:
         cursor = conn.cursor()
         cursor.execute(query)
         lines = cursor.fetchall()
         res = [dict(line) for line in lines]
         return res
 
-    def get_right_query(self, table_name, ids):
+    def get_right_query(self, table_name: str, ids: list[str]):
         ids = ''.join([ f"'{x}'," for x in ids])[:-1]
         return f"""
             SELECT fw.id
@@ -136,7 +133,7 @@ class PostgresMerger:
         """
 
     @backoff()
-    def pg_query_exec(self, conn: psycopg2.extensions.connection, query) :
+    def pg_query_exec(self, conn: psycopg2.extensions.connection, query: str) :
         cursor = conn.cursor()
         cursor.execute(query)
         lines = cursor.fetchall()
